@@ -1,0 +1,114 @@
+class NodoArbol:
+    def __init__(self, valor):
+        self.valor = valor
+        self.izquierda = None
+        self.derecha = None
+
+def insertar_nodo(raiz, valor):
+    if raiz is None:
+        return NodoArbol(valor)
+    if valor < raiz.valor:
+        raiz.izquierda = insertar_nodo(raiz.izquierda, valor)
+    else:
+        raiz.derecha = insertar_nodo(raiz.derecha, valor)
+    return raiz
+
+def crear_arbol():
+    raiz = None
+    while True:
+        entrada_usuario = input("Ingrese un valor (-1 para recibir nodos infinitos, X para detener): ")
+        if entrada_usuario == "X":
+            break
+        elif entrada_usuario == "-1":
+            continue
+        try:
+            valor = int(entrada_usuario)
+            raiz = insertar_nodo(raiz, valor)
+        except ValueError:
+            print("Opción no válida. Ingrese un entero positivo o -1.")
+
+    return raiz
+
+def recorrido_postorden(nodo):
+    if nodo is not None:
+        recorrido_postorden(nodo.izquierda)
+        recorrido_postorden(nodo.derecha)
+        print(nodo.valor, end=' ')
+
+def recorrido_preorden(nodo):
+    if nodo is not None:
+        print(nodo.valor, end=' ')
+        recorrido_preorden(nodo.izquierda)
+        recorrido_preorden(nodo.derecha)
+
+def recorrido_inorden(nodo):
+    if nodo is not None:
+        recorrido_inorden(nodo.izquierda)
+        print(nodo.valor, end=' ')
+        recorrido_inorden(nodo.derecha)
+
+def contar_hojas(nodo):
+    if nodo is None:
+        return 0
+    if nodo.izquierda is None and nodo.derecha is None:
+        return 1
+    return contar_hojas(nodo.izquierda) + contar_hojas(nodo.derecha)
+
+def altura_arbol(nodo):
+    if nodo is None:
+        return 0
+    altura_izquierda = altura_arbol(nodo.izquierda)
+    altura_derecha = altura_arbol(nodo.derecha)
+    return max(altura_izquierda, altura_derecha) + 1
+
+def es_arbol_completo(nodo):
+    if nodo is None:
+        return True
+    if (nodo.izquierda is None and nodo.derecha is not None) or (nodo.izquierda is not None and nodo.derecha is None):
+        return False
+    return es_arbol_completo(nodo.izquierda) and es_arbol_completo(nodo.derecha)
+
+def contar_nodos(nodo):
+    if nodo is None:
+        return 0
+    return 1 + contar_nodos(nodo.izquierda) + contar_nodos(nodo.derecha)
+
+raiz = crear_arbol()
+
+while True:
+    print("\nMenú:")
+    print("1. Recorrido PostOrden")
+    print("2. Recorrido PreOrden")
+    print("3. Recorrido InOrden")
+    print("4. Número de Hojas")
+    print("5. Altura")
+    print("6. ¿Es completo?")
+    print("7. Número de Nodos")
+    print("8. Salir")
+    
+    opcion = input("Seleccione una opción del menú: ")
+
+    if opcion == "1":
+        print("Recorrido PostOrden:")
+        recorrido_postorden(raiz)
+    elif opcion == "2":
+        print("Recorrido PreOrden:")
+        recorrido_preorden(raiz)
+    elif opcion == "3":
+        print("Recorrido InOrden:")
+        recorrido_inorden(raiz)
+    elif opcion == "4":
+        print("Número de Hojas:", contar_hojas(raiz))
+    elif opcion == "5":
+        print("Altura del árbol:", altura_arbol(raiz))
+    elif opcion == "6":
+        if es_arbol_completo(raiz):
+            print("El árbol es completo.")
+        else:
+            print("El árbol no es completo.")
+    elif opcion == "7":
+        print("Número de Nodos:", contar_nodos(raiz))
+    elif opcion == "8":
+        break
+    else:
+        print("Opción no válida. Por favor, seleccione una opción del menú.")
